@@ -1,41 +1,21 @@
-function encoded($ses) 
-{    
-  $sesencoded = $ses; 
-  $num = mt_rand(4,4); 
-  for($i=1;$i<=$num;$i++) 
-  { 
-     $sesencoded = 
-     base64_encode($sesencoded); 
-  } 
-  
-  $alpha_array = 
-  array('Y','D','U','R','P', 
-  'S','B','M','A','T','H'); 
-  $sesencoded = 
-  $sesencoded."+".$alpha_array[$num]; 
-  $sesencoded = 
-  base64_encode($sesencoded); 
-  return $sesencoded; 
-}//end of encoded function 
-
-function decoded($str) 
-{ 
-   $alpha_array = 
-   array('Y','D','U','R','P', 
-   'S','B','M','A','T','H'); 
-   $decoded = 
-    base64_decode($str); 
-   list($decoded,$letter) = 
-   split("\+",$decoded); 
-   for($i=0;$i<count($alpha_array);$i++) 
-   { 
-   if($alpha_array[$i] == $letter) 
-   break; 
-   } 
-   for($j=1;$j<=$i;$j++) 
-   { 
-      $decoded = 
-       base64_decode($decoded); 
-   } 
-   return $decoded; 
-}//end of decoded function 
+protected void btnEnviar_Click(object sender, EventArgs e)
+{
+    string strNombre = &quot;&quot;, strApellido = &quot;&quot;, strUsuario = &quot;&quot;;
+    strNombre = txtNombre.Text;
+    strApellido = txtApellido.Text;
+    strUsuario = txtUsuario.Text;
+    string laURL = &quot;PaginaDestino.aspx?&quot;;
+    if (HttpContext.Current != null)
+    {
+        string elDato = laURL +
+          EncryptQueryString(string.Format(&quot;Nombre={0}&amp;Apellido={1}&amp;Usuario={2}&quot;,
+          strNombre, strApellido, strUsuario));
+        HttpContext.Current.Response.Redirect(elDato);
+    }
+}
+ 
+public string EncryptQueryString(string strQueryString)
+{
+    Encryption objetoCifrar = new Encryption();
+    return objetoCifrar.Encrypt(strQueryString, &quot;j0h44y&quot;);
+}
